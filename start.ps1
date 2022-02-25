@@ -1,3 +1,25 @@
+
+function main() {
+    [CmdletBinding()]
+    param (
+        [int]$one, [int]$two
+    )
+    $sum = $one + $two
+
+    return $sum
+}
+main -one 1 -two 2 #Passing in 2 numbers that will invoke the output of 3
+main -one 4 -two 5
+function main2() {
+    [CmdletBinding()]
+    param (
+        [string]$one, [string]$two
+    )
+    $sum = $one + $two
+
+    return $sum
+}
+main2 -one hello -two hi
 function CheckSoftwareIsInstalled ($software) {
     #Check if application is installed, if not, then install it
     $installed = (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object { $_.DisplayName -Match $software })
@@ -10,38 +32,37 @@ function CheckSoftwareIsInstalled ($software) {
         Write-Host "Not Installed"
     }
 }
-CheckSoftwareIsInstalled("Docker")
-
 function InstallJava($frameworkFolderName, $javaJDKFileName) {
     #Add automation framework packaged file name to txt file and parameterize to method
     #Add Java JDK file name to txt file and parameterize to method
-    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + $javaJDKFileName
+    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + "\" + $javaJDKFileName
 }
 function InstallDocker($frameworkFolderName, $dockerFileName) {
     #Add Docker file name to txt file and parameterize to method
-    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + $dockerFileName
+    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + "\" + $dockerFileName
 }
 function StartDocker() {
     param ([switch]$wait)
     Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe" -Verb RunAs
     if ($wait) {
         $attempts = 0
-        Write-Host "Checking Docker status..."
+        "Checking Docker status..."
      
         do {
             docker ps -a #Check if docker images are initialized
-     
+            #The $? contains the last executed status of the last command
+            #It contains as True if last command succeeded and False if failed
             if ($?) {
                 break;
             }
 
             $attempts++
-            Write-Host "Docker not fully ready, waiting..."
+            "Docker not fully ready, waiting..."
             Start-Sleep 2
 
         } while ($attempts -le 10)
-        Write-Host "Pausing until initialized..."
+        "Pausing until initialized..."
         Start-Sleep 6
     }
-    Write-Host "Docker started"
+    "Docker started"
 }
