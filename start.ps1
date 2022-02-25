@@ -12,11 +12,14 @@ function CheckSoftwareIsInstalled ($software) {
 }
 CheckSoftwareIsInstalled("Docker")
 
-function InstallJava() {
-    Start-Process
+function InstallJava($frameworkFolderName, $javaJDKFileName) {
+    #Add automation framework packaged file name to txt file and parameterize to method
+    #Add Java JDK file name to txt file and parameterize to method
+    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + $javaJDKFileName
 }
-function InstallDocker() {
-
+function InstallDocker($frameworkFolderName, $dockerFileName) {
+    #Add Docker file name to txt file and parameterize to method
+    Start-Process -FilePath "C:\Users\" + $env:USER + "Desktop\" + $frameworkFolderName + $dockerFileName
 }
 function StartDocker() {
     param ([switch]$wait)
@@ -26,7 +29,7 @@ function StartDocker() {
         Write-Host "Checking Docker status..."
      
         do {
-            docker ps -a #| Out-Null
+            docker ps -a #Check if docker images are initialized
      
             if ($?) {
                 break;
